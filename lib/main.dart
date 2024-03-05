@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -104,7 +105,11 @@ class HomeScreen extends StatelessWidget {
           SizedBox(
             width: 10,
           ),
-          Text("Food Menu")
+          Text(
+            "Food Menu",
+            style: TextStyle(
+                fontFamily: "DeliciousHandrawn-Regular", fontSize: 30),
+          )
         ],
       )),
       body: Stack(
@@ -134,38 +139,71 @@ class FoodCategoriesList extends StatelessWidget {
       itemCount: 5,
       itemBuilder: (context, index) {
         String category;
+        IconData iconData;
+        EdgeInsets margin;
+
         switch (index) {
           case 0:
             category = 'Breakfast';
+            iconData = Icons.breakfast_dining;
+            margin = EdgeInsets.only(top: 20);
             break;
           case 1:
             category = 'Lunch';
+            iconData = Icons.restaurant;
+            margin = EdgeInsets.zero;
             break;
           case 2:
             category = 'Snack';
+            iconData = Icons.local_dining;
+            margin = EdgeInsets.zero;
             break;
           case 3:
             category = 'Dinner';
+            iconData = Icons.local_dining;
+            margin = EdgeInsets.zero;
+
             break;
           case 4:
             category = 'Beverages';
+            iconData = Icons.local_cafe;
+            margin = EdgeInsets.zero;
             break;
           default:
             category = '';
+            iconData = Icons.error;
+            margin = EdgeInsets.zero;
         }
         return ListTile(
-          title: Text(
-            category,
-            style: TextStyle(fontSize: 18, color: Colors.white),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                iconData,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                category,
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontFamily: "DeliciousHandrawn-Regular",
+                    letterSpacing: 3),
+              )
+            ],
           ),
           onTap: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FoodItemsScreen(category: category),
-              ),
-            );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FoodItemsScreen(
+                          category: category,
+                        )));
           },
+          contentPadding: margin,
         );
       },
     );
@@ -207,38 +245,62 @@ class _FoodItemsScreenState extends State<FoodItemsScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.category),
+        title: Text(
+          widget.category,
+          style:
+              TextStyle(fontFamily: "DeliciousHandrawn-Regular", fontSize: 30),
+        ),
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            final item = items[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListTile(
-                  title: Text(item.name),
-                  onTap: () {
-                    setState(() {
-                      showImageMap[item.name] =
-                          !(showImageMap[item.name] ?? false);
-                    });
-                  },
-                ),
-                if (showImageMap[item.name] ?? false)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.network(
-                      item.imageUrl,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.contain,
+        child: Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+            image: NetworkImage(
+              "https://i.pinimg.com/736x/96/7d/b6/967db683e191acc49969bfd49a0c1056.jpg",
+            ),
+            fit: BoxFit.cover,
+          )),
+          child: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.food_bank,
+                      color: Colors.white,
                     ),
+                    title: Text(
+                      item.name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "DeliciousHandrawn-Regular",
+                          fontSize: 30),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        showImageMap[item.name] =
+                            !(showImageMap[item.name] ?? false);
+                      });
+                    },
                   ),
-              ],
-            );
-          },
+                  if (showImageMap[item.name] ?? false)
+                    Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Image.network(
+                        item.imageUrl,
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.contain,
+                      ),
+                    )
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

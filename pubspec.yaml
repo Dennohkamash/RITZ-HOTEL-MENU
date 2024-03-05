@@ -16,3 +16,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: DeliciousHandrawn-Regular
+      fonts:
+        - asset: assets/fonts/DeliciousHandrawn-Regular.ttf
